@@ -1,0 +1,5 @@
+{% macro input(name, value = "", type = "text", size = 20, placeholder = "") %}
+    <input class="form-control" name="{{ name }}" value="{{ value|e }}" 
+           type="{{ type|default('text') }}" {% if size > 0 %} size="{{ size }}" {% endif %} 
+           {% if placeholder|length > 0 %} placeholder="{{ placeholder }}" {% endif %} />
+{% endmacro %}

@@ -1,0 +1,16 @@
+{% extends "layout.twig" %}
+
+{% block navigation %}
+    <ul class="nav navbar-nav">
+        <li><a href="{{ path("lista_clientes") }}">Clientes</a></li>
+        <li><a href="{{ path("form_novo_cliente") }}">Novo Cliente</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <h1>Projeto Curso Doctrine</h1>
+    <p>
+        <a class="btn btn-primary" href="{{ path("lista_clientes") }}">Clientes</a>
+        <a class="btn btn-default" href="{{ path("form_novo_cliente") }}">Novo Cliente</a>
+    </p>
+{% endblock %}

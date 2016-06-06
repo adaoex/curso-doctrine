@@ -1,0 +1,54 @@
+{% extends "layout.twig" %}
+
+{% block navigation %}
+    <ul class="nav navbar-nav">
+        <li><a href="{{ path("lista_clientes") }}">Clientes</a></li>
+    </ul>
+{% endblock %}
+
+{% block scripts %}
+    <script src="/js/clientes.js"></script>
+{% endblock%}
+
+{% import "forms.twig" as forms %}
+
+{% block content %}
+    <h2>Novo Cliente</h2>
+        
+    <form id="form-cliente" class="form-horizontal" action="{{ path('novo_cliente') }}" >
+        {{ forms.input('id', cliente.id, 'hidden',0) }}
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Nome</label>
+            <div class="col-sm-10">
+                {{ forms.input('nome', cliente.nome, 'text', 255, 'digite o nome do cliente') }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">CPF</label>
+            <div class="col-sm-10">
+                {{ forms.input('cpf', cliente.cpf, 'text', 255, 'digite o cpf do cliente') }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">RG</label>
+            <div class="col-sm-10">
+                {{ forms.input('rg', cliente.rg, 'text', 255, 'digite o rg do cliente') }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">E-mail</label>
+            <div class="col-sm-10">
+                {{ forms.input('email', cliente.email, 'text', 255, 'digite o email do cliente') }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                {% if cliente.id|length > 0 %}
+                    <button type="submit" class="btn btn-default">Salvar Alterações</button>
+                {% else %}
+                    <button type="submit" class="btn btn-default">Salvar</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}

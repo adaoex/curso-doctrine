@@ -1,66 +1,113 @@
 <?php 
+#error_reporting(E_ALL);
+#ini_set('display_errors', 1);
 require_once __DIR__.'/../bootstrap.php';
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 $response = new Response;
 
 /* $app definida em bootstrap.php */
-$app['clienteProvider'] = function(){
+$app['clienteProvider'] = function() use($entityManager) {
     $cliente = new App\Entity\Cliente();
-    $mapper = new App\Mapper\ClienteMapper( $entityManager );
+    $mapper = new App\Mapper\ClienteMapper($entityManager);
     return new App\Service\ClienteService($cliente, $mapper);
 };
 
-$app->get("/", function() use ($response) {
-    $response->setContent("Primeira Rota Silex /");
-    return $response;
+/* formulários */
+$app->get("/", function() use ($response, $app) {
+    return $app['twig']->render(
+        'index.twig'
+    );
 })->bind("index");
 
-$app->get("/clientes", function() {
+$app->get("/clientes", function() use ($app){
+    $service = $app['clienteProvider'];
+    return $app['twig']->render(
+            'cliente/lista.twig', 
+            ['clientes' => $service->fetchAll()]
+    );
+})->bind("lista_clientes");
+
+$app->get("/cliente/novo", function() use ($app){
+    $service = $service = $app['clienteProvider'];
+    return $app['twig']->render(
+            'cliente/form-cliente.twig',
+            ['cliente' => new App\Entity\Cliente()]
+    );
+})->bind("form_novo_cliente");
+
+$app->get("/cliente/editar/{id}", function($id) use ($app) {
+    $service = $service = $app['clienteProvider'];
+    $cliente  = $service->find($id);
+    return $app['twig']->render(
+            'cliente/form-cliente.twig',
+            ['cliente' => $cliente]
+    );
+})->bind("form_editar_cliente");
+
+
+/* API Clientes */
+$app->get("/api/clientes", function() use ($app){
     $service = $service = $app['clienteProvider'];
     return new JsonResponse( $service->fetchAll() );
 })->bind("clientes");
 
-/*
-$app->get('/cliente/{id}', function ( Silex\Application $app, $id) use ($clientes) {
-    if ( !isset($clientes[$id])){
+$app->get('/api/clientes/{id}', function ($id) use ($app){
+    $service = $service = $app['clienteProvider'];
+    $cliente  = $service->find($id);
+    if ( is_null($cliente) ){
         $app->abort(404, "Erro: ID $id não existe!");
     }
-    return new JsonResponse ( $clientes[$id] );
+    return $app->json($cliente);
 })
+->bind("cliente")
 ->convert('id', function ($id) { return (int) $id; })
 ->assert('id', '\d+')
-->value('id', 0) /* default values */;
+->value('id', 0);
 
-/* post */
-$app->get("/cliente", function() use ($app){
-    $dados = ["nome"=>"Cliente 01","email"=>"cli01@gmail.com", "cpf"=> 0123];
-    
-    /* reduzindo acoplamento */
-    /* substituido pelao 'clienteProvider'
-    $cliente = new App\Entity\Cliente();
-    $mapper = new App\Mapper\ClienteMapper();
-    $service = new App\Service\ClienteService($cliente, $mapper);
-    */
-    
+$app->post("/api/clientes", function(Request $request) use ($app){
+    $dados = [    
+        "nome"=> $request->get('nome'),
+        "email"=> $request->get('email'),
+        "cpf"=> $request->get('cpf'),
+        "rg"=> $request->get('rg'),
+    ];
     $service = $app['clienteProvider'];
     $result = $service->insert($dados);
-    
-    return new JsonResponse($result);
-})->bind("cliente");
 
-$app->get('/cliente/detalhe/{id}', function (Silex\Application $app, $id) {
-    $service = $service = $app['clienteProvider'];
-    $clientes  = $service->fetchAll();
-    if ( !isset($clientes[$id])){
+    return new JsonResponse($result);
+})->bind("novo_cliente");
+
+$app->put('/api/clientes/{id}', function ( Request $request, $id) use ($app){
+    $service = $app['clienteProvider'];
+    $cliente  = $service->find($id);
+    if (is_null($cliente) ){
         $app->abort(404, "Erro: ID $id não existe!");
     }
-    return $app['twig']->render(
-        'detalhe.twig', 
-        ["cliente" => $clientes[$id]] 
-    );
-})->bind("cliente_detalhe");
+    $dados =  [
+        "nome"=> $request->get('nome'),
+        "email"=> $request->get('email'),
+        "cpf"=> $request->get('cpf'),
+        "rg"=> $request->get('rg'),
+    ];
+    $ret = $service->update($id, $dados );
+    return $app->json($ret);
+})
+->bind("cliente_editar");
+
+
+$app->delete('/api/clientes/{id}', function ( $id) use ($app){
+    $service = $app['clienteProvider'];
+    $cliente  = $service->find($id);
+    if (is_null($cliente) ){
+        $app->abort(404, "Erro: ID $id não existe!");
+    }
+    $ret = $service->delete($id);
+    return $app->json($ret);
+})
+->bind("cliente_delete");
 
 $app->run();

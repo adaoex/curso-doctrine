@@ -30,68 +30,66 @@ class Cliente
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $cnpj;
+    private $rg;
     
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $cpf;
     
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
 
-    function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-    
-    function getNome()
+    public function getNome()
     {
         return $this->nome;
     }
 
-    function getEmail()
+    public function getEmail()
     {
         return $this->email;
     }
 
-    function getCnpj()
+    public function getRg()
     {
-        return $this->cnpj;
+        return $this->rg;
     }
 
-    function getCpf()
+    public function getCpf()
     {
         return $this->cpf;
     }
 
-    function setNome($nome)
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function setNome($nome)
     {
         $this->nome = $nome;
         return $this;
     }
 
-    function setEmail($email)
+    public function setEmail($email)
     {
         $this->email = $email;
         return $this;
     }
 
-    function setCnpj($cnpj)
+    public function setRg($rg)
     {
-        $this->cnpj = $cnpj;
+        $this->rg = $rg;
         return $this;
     }
 
-    function setCpf($cpf)
+    public function setCpf($cpf)
     {
         $this->cpf = $cpf;
         return $this;
     }
 
-
-    
 }

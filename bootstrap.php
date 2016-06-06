@@ -41,14 +41,10 @@ AnnotationRegistry::registerFile(
 $eventManager = new Doctrine\Common\EventManager();
 $entityManager = \Doctrine\ORM\EntityManager::create(
     [
-        'driver'    => 'pdo_mysql',
-        'host'      => 'df-db-p-03',
-        'port'      => '3306',
-        'user'      => 'oauth',
-        'password'  => 'B7w4j4t#IPpXHg6z$FdfyC',
-        'dbname'    => 'db_doctrine_test',
+        'driver'    => 'pdo_sqlite',
+        'path'     => __DIR__.'/app.db',
     ],
-    $config, 
+    $config,
     $eventManager
 );
 

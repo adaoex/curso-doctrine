@@ -26,13 +26,33 @@ class ClienteMapper
     {
         $this->em->persist($cliente);
         $this->em->flush();
-        return ['success' => true];
+    }
+
+    public function update($id, array $dados)
+    {
+        $cliente = $this->em->find('App\\Entity\\Cliente', $id);
+        $cliente->setNome($dados['nome']);
+        $cliente->setRg($dados['rg']);
+        $cliente->setCpf($dados['cpf']);
+        $cliente->setEmail($dados['email']);
+        $this->em->flush();
     }
 
     public function fetchAll()
     {
-        # $this->em->getRepository($entityName)->findAll();
-        return $clientes;
+        return $this->em->getRepository('App\\Entity\\Cliente')->findAll();
+    }
+
+    public function find($id)
+    {
+        return $this->em->find('App\\Entity\\Cliente', $id);
+    }
+    
+    public function delete($id)
+    {
+        $cliente = $this->em->find('App\\Entity\\Cliente', $id);
+        $this->em->remove($cliente);
+        $this->em->flush();
     }
 
 }

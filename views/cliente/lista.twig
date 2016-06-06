@@ -1,0 +1,35 @@
+{% extends "layout.twig" %}
+
+{% block scripts %}
+    <script src="/js/clientes.js"></script>
+{% endblock%}
+
+{% block content %}
+    <h1>Lista de Clientes</h1>
+    
+    <p>
+        <a class="btn btn-default" href="{{ path("form_novo_cliente") }}">Novo Cliente</a>
+    </p>
+    <table id="table-clientes" class="table table-hover">
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>CNPJ/CPF</th>
+            <th>RG</th>
+            <th></th>
+        </tr>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.rg }}</td>
+            <td>
+                <a class="btn btn-primary" href="{{ path('form_editar_cliente',{id: cliente.id}) }}" >Editar</a>
+                <a class="btn btn-danger" data-id="{{ cliente.id }}" href="#" >Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

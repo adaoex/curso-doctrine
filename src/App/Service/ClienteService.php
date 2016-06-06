@@ -25,18 +25,35 @@ class ClienteService
     public function insert(array $dados)
     {
         $this->cliente->setNome($dados['nome']);
-        $this->cliente->setCnpj(isset($dados['cnpj']) ? $dados['cnpj'] : null);
-        $this->cliente->setCpf(isset($dados['cpf']) ? $dados['cpf'] : null);
+        $this->cliente->setRg($dados['rg']);
+        $this->cliente->setCpf($dados['cpf']);
         $this->cliente->setEmail($dados['email']);
 
         $res = $this->mapper->insert($this->cliente);
 
-        return $res;
+        return ['success' => true];
+    }
+    
+    public function update($id, array $dados)
+    {
+        $res = $this->mapper->update($id, $dados);
+        return ['success' => true];
     }
 
     public function fetchAll()
     {
         return $this->mapper->fetchAll();
+    }
+    
+    public function find($id)
+    {
+        return $this->mapper->find($id);
+    }
+    
+    public function delete($id)
+    {
+        $this->mapper->delete($id);
+        return ['success' => true];
     }
 
 }
