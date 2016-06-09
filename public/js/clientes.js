@@ -4,8 +4,7 @@ $(function () {
 
         var $form = $(this),
             id = $form.find("input[name='id']").val(),
-            campos = $form.serialize(), 
-            url = id.length === 0 ?'/api/clientes':'/api/clientes/' + id;
+            campos = $form.serialize();
         
         var success = function (data) {
             if (data.success){
@@ -24,9 +23,9 @@ $(function () {
         };
         
         if ( id.length === 0 ){
-            $.ajax({type: "POST",url: url,data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",url: '/api/clientes',data: campos,success: success,dataType: 'json'});
         }else{
-            $.ajax({type: "PUT",url: url,data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",url: '/api/clientes/'+id,data: campos,success: success,dataType: 'json'});
         }
     });
     
@@ -34,8 +33,9 @@ $(function () {
         var id = $(this).attr('data-id');
         
         $.ajax({
-            type: "DELETE",
-            url: '/api/clientes/' + id,
+            type: "POST",
+            data: {_method: 'DELETE'},
+            url: '/api/clientes/' + id+'/del',
             success: function(){
                 window.location.reload();
             },

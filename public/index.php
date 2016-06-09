@@ -96,10 +96,11 @@ $app->put('/api/clientes/{id}', function ( Request $request, $id) use ($app){
     $ret = $service->update($id, $dados );
     return $app->json($ret);
 })
-->bind("cliente_editar");
+->bind("cliente_editar")
+->method('PUT|POST');
 
 
-$app->delete('/api/clientes/{id}', function ( $id) use ($app){
+$app->delete('/api/clientes/{id}/del', function ( $id) use ($app){
     $service = $app['clienteProvider'];
     $cliente  = $service->find($id);
     if (is_null($cliente) ){
@@ -108,6 +109,7 @@ $app->delete('/api/clientes/{id}', function ( $id) use ($app){
     $ret = $service->delete($id);
     return $app->json($ret);
 })
-->bind("cliente_delete");
+->bind("cliente_delete")
+->method('DELETE|POST');
 
 $app->run();
