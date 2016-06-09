@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Cliente;
-use App\Mapper\ClienteMapper;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of ClienteService
@@ -13,47 +13,58 @@ use App\Mapper\ClienteMapper;
 class ClienteService
 {
 
-    private $cliente;
-    private $mapper;
-
-    public function __construct(Cliente $cliente, ClienteMapper $mapper)
+    private $em;
+    
+    public function __construct(EntityManager $em)
     {
-        $this->cliente = $cliente;
-        $this->mapper = $mapper;
+        $this->em = $em;
     }
 
     public function insert(array $dados)
     {
-        $this->cliente->setNome($dados['nome']);
-        $this->cliente->setRg($dados['rg']);
-        $this->cliente->setCpf($dados['cpf']);
-        $this->cliente->setEmail($dados['email']);
+        $entity = new Cliente();
+        $entity->setNome($dados['nome']);
+        $entity->setRg($dados['rg']);
+        $entity->setCpf($dados['cpf']);
+        $entity->setEmail($dados['email']);
 
-        $res = $this->mapper->insert($this->cliente);
+        $res = $this->em->persist($entity);
+        $this->em->flush();
 
-        return ['success' => true];
+        return $entity;
     }
     
     public function update($id, array $dados)
     {
-        $res = $this->mapper->update($id, $dados);
-        return ['success' => true];
+        $entity = $this->em->getReference( 'App\\Entity\\Cliente', $id);
+        $entity->setNome($dados['nome']);
+        $entity->setRg($dados['rg']);
+        $entity->setCpf($dados['cpf']);
+        $entity->setEmail($dados['email']);
+
+        $res = $this->em->persist($entity);
+        $this->em->flush();
+
+        return $entity;
     }
 
     public function fetchAll()
     {
-        return $this->mapper->fetchAll();
+        return $this->em->getRepository("App\\Entity\\Cliente")->findAll();
     }
     
     public function find($id)
     {
-        return $this->mapper->find($id);
+        return $this->em->getRepository("App\\Entity\\Cliente")->find($id);
     }
     
     public function delete($id)
     {
-        $this->mapper->delete($id);
-        return ['success' => true];
+        $entity = $this->em->getReference( 'App\\Entity\\Cliente', $id);
+        
+        $res = $this->em->remove($entity);
+        $this->em->flush();
+        return true;
     }
 
 }

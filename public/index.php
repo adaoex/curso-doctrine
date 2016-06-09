@@ -11,9 +11,7 @@ $response = new Response;
 
 /* $app definida em bootstrap.php */
 $app['clienteProvider'] = function() use($entityManager) {
-    $cliente = new App\Entity\Cliente();
-    $mapper = new App\Mapper\ClienteMapper($entityManager);
-    return new App\Service\ClienteService($cliente, $mapper);
+    return new App\Service\ClienteService($entityManager);
 };
 
 /* formulários */
@@ -76,9 +74,13 @@ $app->post("/api/clientes", function(Request $request) use ($app){
         "rg"=> $request->get('rg'),
     ];
     $service = $app['clienteProvider'];
-    $result = $service->insert($dados);
-
-    return new JsonResponse($result);
+    try{
+        $result = $service->insert($dados);
+        $return = ['success' => true];
+    }  catch (\Exception $ex){
+        $return = ['success' => false];
+    }
+    return new JsonResponse($return);
 })->bind("novo_cliente");
 
 $app->put('/api/clientes/{id}', function ( Request $request, $id) use ($app){
@@ -93,8 +95,14 @@ $app->put('/api/clientes/{id}', function ( Request $request, $id) use ($app){
         "cpf"=> $request->get('cpf'),
         "rg"=> $request->get('rg'),
     ];
-    $ret = $service->update($id, $dados );
-    return $app->json($ret);
+    
+    try{
+        $result = $service->update($id, $dados);
+        $return = ['success' => true];
+    }  catch (\Exception $ex){
+        $return = ['success' => false];
+    }
+    return new JsonResponse($return);
 })
 ->bind("cliente_editar")
 ->method('PUT|POST');
