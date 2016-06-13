@@ -13,6 +13,12 @@ $ cd project/
 vendor/doctrine/orm/bin/doctrine orm:schema-tool:update --force
 ```
 
+- Conferir SQL produzido
+```
+$ cd project/
+vendor/doctrine/orm/bin/doctrine orm:schema-tool:update --dump-sql
+```
+
 - validação do banco de dados
 ```
 $ cd project/

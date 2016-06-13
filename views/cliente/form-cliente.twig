@@ -15,8 +15,15 @@
 {% block content %}
     <h2>Novo Cliente</h2>
         
-    <form method="post" id="form-cliente" class="form-horizontal" action="{{ path('novo_cliente') }}" >
+    <form method="post" id="form-cliente" class="form-horizontal" 
+        {% if cliente.id > 0 %}
+          action="{{ path('cliente_editar', {id: cliente.id}) }}" >
+        {% else %}
+            action="{{ path('novo_cliente') }}" >
+        {% endif %}
+        
         {{ forms.input('id', cliente.id, 'hidden',0) }}
+        
         {% if cliente.id > 0 %}
             <input type="hidden" id="_method" name="_method" value="PUT">
         {% endif %}
