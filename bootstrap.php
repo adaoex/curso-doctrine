@@ -63,3 +63,5 @@ $app->register(new DoctrineServiceProvider(), array(
         'path'     => __DIR__.'/app.db',
     ),
 ));
+
+$app->register(new Silex\Provider\AssetServiceProvider());

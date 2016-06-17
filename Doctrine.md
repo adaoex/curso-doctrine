@@ -44,3 +44,8 @@ vendor/doctrine/orm/bin/doctrine dbal:run-sql "SELECT * from cliente"
 vendor/doctrine/orm/bin/doctrine orm:run-dql "SELECT c FROM App\Entity\Cliente c order by c.nome desc"
 ```
 
+## Eventos
+
+http://doctrine-orm.readthedocs.io/en/latest/reference/events.html
+
+
