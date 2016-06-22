@@ -48,9 +48,9 @@ class ClienteService
         return $entity;
     }
 
-    public function fetchAll()
+    public function fetchAll($firstResults = 0, $maxResults = 100)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->findAll();
+        return $this->em->getRepository("App\\Entity\\Cliente")->findAllPaginator($firstResults, $maxResults);
     }
     
     public function find($id)
@@ -67,4 +67,14 @@ class ClienteService
         return true;
     }
 
+    public function search($termo, $firstResults = 0, $maxResults = 100)
+    {
+        return $this->em->getRepository("App\\Entity\\Cliente")->search($termo, $firstResults, $maxResults);
+    }
+    
+    public function total($termo = null)
+    {
+        return $this->em->getRepository("App\\Entity\\Cliente")->total($termo);
+    }
+    
 }

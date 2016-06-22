@@ -1,0 +1,34 @@
+<nav>
+    {% if paginacao.total_paginas > 0 %}
+        <ul class="pagination">
+            {% for idx in 1..paginacao.total_paginas %}
+                {% set link = "?pag=" ~ loop.index %}
+                {% if busca|length > 0%}
+                    {% set link = link ~ "&s=" ~ busca %}
+                {% endif %}
+                {% if paginacao.pagina_corrente == loop.index %}
+                    {% set link = "#" %}
+                {% endif %}
+
+                {% if loop.first %}
+                    <li {% if paginacao.pagina_corrente == loop.index %}class="disabled"{% endif %}>
+                        <a href="{{ link }}" aria-label="Ant">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li {% if paginacao.pagina_corrente == loop.index %}class="active"{% endif %} >
+                    <a href="{{ link }}">{{ loop.index }}</a>
+                </li>
+
+                {% if loop.last %}
+                    <li {% if paginacao.pagina_corrente == loop.index %}class="disabled"{% endif %} >
+                        <a href="{{ link }}" aria-label="Próx"><span aria-hidden="true">&raquo;</span></a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    {% endif %}
+</nav>

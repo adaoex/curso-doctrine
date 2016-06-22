@@ -33,9 +33,9 @@ $(function () {
         var id = $(this).attr('data-id');
         
         $.ajax({
-            type: "POST",
+            type: "DELETE",
             data: {_method: 'DELETE'},
-            url: '/api/clientes/' + id+'/del',
+            url: '/api/clientes/' + id,
             success: function(){
                 window.location.reload();
             },

@@ -10,13 +10,22 @@
     <p>
         <a class="btn btn-default" href="{{ path("form_novo_cliente") }}">Novo Cliente</a>
     </p>
+    <form class="form-inline" method="get" >
+        <div class="form-group">
+            <label for="s">Pesquisar (parte do Nome)</label>
+            <input type="text" name="s" id="s" class="form-control" value="{{ busca }}" placeholder="Nome...">
+        </div>
+        <button type="submit" class="btn btn-default">Buscar</button>
+        <a class="btn btn-default" href="?" >Limpar</a>
+    </form><br>
+    
     <table id="table-clientes" class="table table-hover">
         <tr>
             <th>Nome</th>
             <th>E-mail</th>
             <th>CNPJ/CPF</th>
             <th>RG</th>
-            <th></th>
+            <th></th>   
         </tr>
         {% for cliente in clientes %}
         <tr>
@@ -31,5 +40,7 @@
         </tr>
         {% endfor %}
     </table>
-
+        
+        {% include 'pagination.twig' with paginacao %}
+        
 {% endblock %}
