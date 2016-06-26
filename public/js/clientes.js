@@ -14,11 +14,18 @@ $(function () {
                         <span aria-hidden="true">&times;</span></button>\n\
                         <strong>OK!</strong> Salvo com sucesso. </div>');
             }else{
+                var mensagem = "";
+                if ( data.errors !== undefined ){
+                    for (i=0, len = data.errors.length; i<len; i++ ){
+                        mensagem += data.errors[i] + "<br>";
+                    }
+                }
                 $('.starter-template h2')
                         .after('<div class="alert alert-warning alert-dismissible" role="alert"> \n\
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n\
                         <span aria-hidden="true">&times;</span></button>\n\
-                        <strong>Erro!</strong> Ocorreu um erro. </div>');
+                        <strong>Erro!</strong> Ocorreu um erro. <br>\n\
+                        '+mensagem+' </div>');
             }
         };
         

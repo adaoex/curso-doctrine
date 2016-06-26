@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Entity\BaseEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Entity\ClienteRepository")
- * $ORM\Table("clientes")
+ * @ORM\Entity(repositoryClass="ClienteRepository")
+ * @ORM\Table("clientes")
  */
-class Cliente
+class Cliente extends BaseEntity
 {
     /**
      * @ORM\Id
@@ -23,17 +24,17 @@ class Cliente
     private $nome;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=120)
      */
     private $email;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=15)
      */
     private $rg;
     
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=11)
      */
     private $cpf;
     
@@ -92,4 +93,6 @@ class Cliente
         return $this;
     }
 
+
+    
 }
