@@ -20,7 +20,8 @@ class ProdutoService
         $entity = new Produto();
         $entity->setNome($dados['nome']);
         $entity->setDescricao($dados['descricao']);
-        $entity->setValor($dados['valor']);
+        $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
+        $entity->setValor( $valor );
         
         $res = $this->em->persist($entity);
         $this->em->flush();
@@ -32,9 +33,9 @@ class ProdutoService
     {
         $entity = $this->em->getReference( 'App\\Entity\\Produto', $id);
         $entity->setNome($dados['nome']);
-        $entity->setRg($dados['rg']);
-        $entity->setCpf($dados['cpf']);
-        $entity->setEmail($dados['email']);
+        $entity->setDescricao($dados['descricao']);
+        $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
+        $entity->setValor( $valor );
 
         $res = $this->em->persist($entity);
         $this->em->flush();
@@ -44,17 +45,19 @@ class ProdutoService
 
     public function fetchAll($firstResults = 0, $maxResults = 100)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->findAllPaginator($firstResults, $maxResults);
-    }
+        return $this->em
+                    ->getRepository("App\\Entity\\Produto")
+                    ->findAllPaginator($firstResults, $maxResults);
+        }
     
     public function find($id)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->find($id);
+        return $this->em->getRepository("App\\Entity\\Produto")->find($id);
     }
     
     public function delete($id)
     {
-        $entity = $this->em->getReference( 'App\\Entity\\Cliente', $id);
+        $entity = $this->em->getReference( 'App\\Entity\\Produto', $id);
         
         $res = $this->em->remove($entity);
         $this->em->flush();
@@ -63,12 +66,20 @@ class ProdutoService
 
     public function search($termo, $firstResults = 0, $maxResults = 100)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->search($termo, $firstResults, $maxResults);
+        return $this->em
+                    ->getRepository("App\\Entity\\Produto")
+                    ->search($termo, $firstResults, $maxResults);
     }
     
     public function total($termo = null)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->total($termo);
+        return $this->em->getRepository("App\\Entity\\Produto")->total($termo);
     }
     
+    public function findAllArray()
+    {
+        return $this->em
+                ->getRepository("App\\Entity\\Produto")
+                ->findAllArray();
+    }
 }

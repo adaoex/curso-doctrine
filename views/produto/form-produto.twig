@@ -8,53 +8,48 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('/js/clientes.js') }}"></script>
+    <script src="{{ asset('/js/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('/js/produtos.js') }}"></script>
 {% endblock%}
 
 {% import "forms.twig" as forms %}
 
 {% block content %}
-    <h2>Novo Cliente</h2>
+    <h2>Produto</h2>
         
-    <form method="post" id="form-cliente" class="form-horizontal" 
-        {% if cliente.id > 0 %}
-          action="{{ path('cliente_editar', {id: cliente.id}) }}" >
+    <form method="post" id="form-produto" class="form-horizontal" 
+        {% if produto.id > 0 %}
+          action="{{ path('produto_editar', {id: produto.id}) }}" >
         {% else %}
-            action="{{ path('novo_cliente') }}" >
+            action="{{ path('novo_produto') }}" >
         {% endif %}
         
-        {{ forms.input('id', cliente.id, 'hidden',0) }}
+        {{ forms.input('id', produto.id, 'hidden',0) }}
         
-        {% if cliente.id > 0 %}
+        {% if produto.id > 0 %}
             <input type="hidden" id="_method" name="_method" value="PUT">
         {% endif %}
         <div class="form-group">
             <label class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
-                {{ forms.input('nome', cliente.nome, 'text', 255, 'digite o nome do cliente') }}
+                {{ forms.input('nome', produto.nome, 'text', 255, 'digite o nome do produto') }}
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">CPF</label>
+            <label class="col-sm-2 control-label">Descrição</label>
             <div class="col-sm-10">
-                {{ forms.input('cpf', cliente.cpf, 'text', 255, 'digite o cpf do cliente') }}
+                {{ forms.input('descricao', produto.descricao, 'text', 255, 'digite o descrição do produto') }}
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">RG</label>
+            <label class="col-sm-2 control-label">Valor</label>
             <div class="col-sm-10">
-                {{ forms.input('rg', cliente.rg, 'text', 255, 'digite o rg do cliente') }}
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">E-mail</label>
-            <div class="col-sm-10">
-                {{ forms.input('email', cliente.email, 'text', 255, 'digite o email do cliente') }}
+                {{ forms.input('valor', produto.valor|number_format(2, ',', '.'), 'text', 10) }}
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                {% if cliente.id|length > 0 %}
+                {% if produto.id|length > 0 %}
                     <button type="submit" class="btn btn-default">Salvar Alterações</button>
                 {% else %}
                     <button type="submit" class="btn btn-default">Salvar</button>

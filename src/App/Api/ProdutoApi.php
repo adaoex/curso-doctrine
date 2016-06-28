@@ -2,19 +2,18 @@
 
 namespace App\Api;
 
-use App\Service\ClienteService;
-use App\Validator;
+use App\Service\ProdutoService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ClienteApi
+class ProdutoApi
 {
 
     protected $service;
 
-    public function __construct(ClienteService $service)
+    public function __construct(ProdutoService $service)
     {
         $this->service = $service;
     }
@@ -28,26 +27,20 @@ class ClienteApi
     {
         $dados = [
             "nome" => $request->get('nome'),
-            "email" => $request->get('email'),
-            "cpf" => $request->get('cpf'),
-            "rg" => $request->get('rg'),
+            "descricao" => $request->get('descricao'),
+            "valor" => $request->get('valor'),
         ];
         $constraint = new Assert\Collection(array(
             'nome' => array(
                 new Assert\NotBlank(),
                 new Assert\Length(array('min' => 3, 'max' => 255))
             ),
-            'email' => array(
+            'descricao' => array(
                 new Assert\NotBlank(),
-                new Assert\Email(),
+                new Assert\Length(array('min' => 3, 'max' => 8000))
             ),
-            'cpf' => array(
+            'valor' => array(
                 new Assert\NotBlank(),
-                new Validator\Cpf,
-            ),
-            'rg' => array(
-                new Assert\NotBlank(),
-                new Assert\Length(array('min' => 3))
             ),
         ));
 
@@ -76,12 +69,12 @@ class ClienteApi
     public function buscaPorId($id, Application $app)
     {
         $entity = $this->service->find($id);
-        if (! $entity instanceof \App\Entity\Cliente) {
+        if (is_null($entity)) {
             return $app->json(array(
                         'errors' => ["Erro: Registro com ID = $id não existe!"]
             ));
         }
-        return $app->json( $entity->toArray() );
+        return $app->json($entity->toArray());
     }
 
     public function editar(Request $request, $id, Application $app)
@@ -95,26 +88,20 @@ class ClienteApi
         }
         $dados = [
             "nome" => $request->get('nome'),
-            "email" => $request->get('email'),
-            "cpf" => $request->get('cpf'),
-            "rg" => $request->get('rg'),
+            "descricao" => $request->get('descricao'),
+            "valor" => $request->get('valor'),
         ];
         $constraint = new Assert\Collection(array(
             'nome' => array(
                 new Assert\NotBlank(),
                 new Assert\Length(array('min' => 3, 'max' => 255))
             ),
-            'email' => array(
+            'descricao' => array(
                 new Assert\NotBlank(),
-                new Assert\Email(),
+                new Assert\Length(array('min' => 3, 'max' => 8000))
             ),
-            'cpf' => array(
+            'valor' => array(
                 new Assert\NotBlank(),
-                new Validator\Cpf(),
-            ),
-            'rg' => array(
-                new Assert\NotBlank(),
-                new Assert\Length(array('min' => 3))
             ),
         ));
 

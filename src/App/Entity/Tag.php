@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +22,7 @@ class Tag extends BaseEntity
      * @ORM\Column(type="string", length=255)
      */
     private $nome;
+    
     
     public function getId()
     {
@@ -44,4 +46,8 @@ class Tag extends BaseEntity
         return $this;
     }
     
+    public function toArray()
+    {
+        return \get_object_vars($this);
+    }
 }

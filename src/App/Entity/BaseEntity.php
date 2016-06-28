@@ -5,14 +5,14 @@ namespace App\Entity;
 abstract class BaseEntity implements \ArrayAccess
 {
 
-    function __construct(array $data = array())
+    public function __construct(array $data = array())
     {
         foreach ($data as $key => $value) {
             $this->__set($key, $value);
         }
     }
 
-    function __get($name)
+    public function __get($name)
     {
         $method = "get" . ucwords($name);
         if (method_exists($this, $method)){
@@ -22,7 +22,7 @@ abstract class BaseEntity implements \ArrayAccess
         }
     }
 
-    function __set($name, $value)
+    public function __set($name, $value)
     {
         $method = "set" . ucwords($name);
         if (method_exists($this, $method)){
@@ -34,7 +34,7 @@ abstract class BaseEntity implements \ArrayAccess
 
     /* Méthodes */
 
-    function offsetExists($offset)
+    public function offsetExists($offset)
     {
         if (property_exists($this, $offset)){
             return true;
@@ -43,49 +43,36 @@ abstract class BaseEntity implements \ArrayAccess
         }
     }
 
-    function offsetGet($offset)
+    public function offsetGet($offset)
     {
         return $this->__get($offset);
     }
 
-    function offsetSet($offset, $value)
+    public function offsetSet($offset, $value)
     {
         return $this->__set($offset, $value);
     }
 
-    function offsetUnset($offset)
+    public function offsetUnset($offset)
     {
         if (property_exists($this, $offset)):
             unset($this->$offset);
         endif;
     }
 
-    function __toString()
+    public function __toString()
     {
         ob_start();
         var_dump($this);
         return ob_get_clean();
     }
 
-    /**
-     * get properties as an associative array 
-     * and trim null value
-     * @see http://briancray.com/posts/remove-null-values-php-arrays
-     */
-    function toArray()
-    {
-        $array = \array_filter(\get_object_vars($this), function($value) {
-                    return $value != null;
-                });
-        return $array;
-    }
-
-    function serialize()
+    public function serialize()
     {
         return json_encode($this->toArray());
     }
 
-    function deszerialize($json)
+    public function deszerialize($json)
     {
         $datas = json_decode($json);
         $this->__construct($datas);

@@ -2,10 +2,10 @@
 
 namespace App\Service;
 
-use App\Entity\Cliente;
+use App\Entity\Tag;
 use Doctrine\ORM\EntityManager;
 
-class ClienteService
+class TagService
 {
 
     private $em;
@@ -17,12 +17,7 @@ class ClienteService
 
     public function insert(array $dados)
     {
-        $entity = new Cliente();
-        $entity->setNome($dados['nome']);
-        $entity->setRg($dados['rg']);
-        $entity->setCpf($dados['cpf']);
-        $entity->setEmail($dados['email']);
-
+        $entity = new Tag($dados);
         $res = $this->em->persist($entity);
         $this->em->flush();
 
@@ -31,12 +26,8 @@ class ClienteService
     
     public function update($id, array $dados)
     {
-        $entity = $this->em->getReference( 'App\\Entity\\Cliente', $id);
+        $entity = $this->em->getReference( 'App\\Entity\\Tag', $id);
         $entity->setNome($dados['nome']);
-        $entity->setRg($dados['rg']);
-        $entity->setCpf($dados['cpf']);
-        $entity->setEmail($dados['email']);
-
         $res = $this->em->persist($entity);
         $this->em->flush();
 
@@ -46,18 +37,18 @@ class ClienteService
     public function fetchAll($firstResults = 0, $maxResults = 100)
     {
         return $this->em
-                    ->getRepository("App\\Entity\\Cliente")
+                    ->getRepository("App\\Entity\\Tag")
                     ->findAllPaginator($firstResults, $maxResults);
-    }
+        }
     
     public function find($id)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->find($id);
+        return $this->em->getRepository("App\\Entity\\Tag")->find($id);
     }
     
     public function delete($id)
     {
-        $entity = $this->em->getReference( 'App\\Entity\\Cliente', $id);
+        $entity = $this->em->getReference( 'App\\Entity\\Tag', $id);
         
         $res = $this->em->remove($entity);
         $this->em->flush();
@@ -67,20 +58,19 @@ class ClienteService
     public function search($termo, $firstResults = 0, $maxResults = 100)
     {
         return $this->em
-                    ->getRepository("App\\Entity\\Cliente")
+                    ->getRepository("App\\Entity\\Tag")
                     ->search($termo, $firstResults, $maxResults);
     }
     
     public function total($termo = null)
     {
-        return $this->em->getRepository("App\\Entity\\Cliente")->total($termo);
+        return $this->em->getRepository("App\\Entity\\Tag")->total($termo);
     }
     
     public function findAllArray()
     {
         return $this->em
-                ->getRepository("App\\Entity\\Cliente")
+                ->getRepository("App\\Entity\\Tag")
                 ->findAllArray();
     }
-    
 }

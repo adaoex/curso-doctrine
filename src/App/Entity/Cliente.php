@@ -92,7 +92,10 @@ class Cliente extends BaseEntity
         $this->cpf = $cpf;
         return $this;
     }
-
-
+    
+    public function toArray()
+    {
+        return \get_object_vars($this);
+    }
     
 }

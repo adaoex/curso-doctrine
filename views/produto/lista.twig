@@ -8,14 +8,15 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('/js/clientes.js') }}"></script>
+    <script src="{{ asset('/js/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('/js/produtos.js') }}"></script>
 {% endblock%}
 
 {% block content %}
-    <h1>Lista de Clientes</h1>
+    <h1>Lista de Produtos</h1>
     
     <p>
-        <a class="btn btn-default" href="{{ path("form_novo_cliente") }}">Novo Cliente</a>
+        <a class="btn btn-default" href="{{ path("form_novo_produto") }}">Novo Produto</a>
     </p>
     <form class="form-inline" method="get" >
         <div class="form-group">
@@ -26,23 +27,21 @@
         <a class="btn btn-default" href="?" >Limpar</a>
     </form><br>
     
-    <table id="table-clientes" class="table table-hover">
+    <table id="table-produtos" class="table table-hover">
         <tr>
             <th>Nome</th>
-            <th>E-mail</th>
-            <th>CNPJ/CPF</th>
-            <th>RG</th>
+            <th>Descrição</th>
+            <th>Valor</th>
             <th></th>   
         </tr>
-        {% for cliente in clientes %}
+        {% for produto in produtos %}
         <tr>
-            <td>{{ cliente.nome }}</td>
-            <td>{{ cliente.email }}</td>
-            <td>{{ cliente.cpf }}</td>
-            <td>{{ cliente.rg }}</td>
+            <td>{{ produto.nome }}</td>
+            <td>{{ produto.descricao }}</td>
+            <td>{{ produto.valor|number_format(2, ',', '.') }}</td>
             <td>
-                <a class="btn btn-primary" href="{{ path('form_editar_cliente',{id: cliente.id}) }}" >Editar</a>
-                <a class="btn btn-danger" data-id="{{ cliente.id }}" href="#" >Excluir</a>
+                <a class="btn btn-primary" href="{{ path('form_editar_produto',{id: produto.id}) }}" >Editar</a>
+                <a class="btn btn-danger" data-id="{{ produto.id }}" href="#" >Excluir</a>
             </td>
         </tr>
         {% endfor %}

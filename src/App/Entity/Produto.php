@@ -32,6 +32,27 @@ class Produto  extends BaseEntity
      */
     private $valor;
     
+    /**
+    * @ORM\OneToOne(targetEntity="Categoria")
+    * @ORM\JoinColumn(name="categoria_id", referencedColumnName="id")
+    */
+    private $categoria;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="Tag")
+    * @ORM\JoinTable(name="produtos_tags",
+    *      joinColumns={@ORM\JoinColumn(name="produto_id", referencedColumnName="id")},
+    *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+    *   )
+    */
+    private $tags;
+    
+    public function __construct(array $data = array())
+    {
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        parent::__construct($data);
+    }
+    
     function getId()
     {
         return $this->id;
@@ -76,4 +97,36 @@ class Produto  extends BaseEntity
         return $this;
     }
     
+    public function getCategoria()
+    {
+        return $this->categoria;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setCategoria($categoria)
+    {
+        $this->categoria = $categoria;
+        return $this;
+    }
+
+    public function addTags(Tag $tag)
+    {
+        $this->tags->add($tag);
+        return $this;
+    }
+    
+    public function removeTags(Tag $tag)
+    {
+        $this->tags->remove($tag);
+        return $this;
+    }
+    
+    public function toArray()
+    {
+        return \get_object_vars($this);
+    }
 }
