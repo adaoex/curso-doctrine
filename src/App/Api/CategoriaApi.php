@@ -2,18 +2,20 @@
 
 namespace App\Api;
 
-use App\Service\ProdutoService;
+use App\Entity\Categoria;
+use App\Service\CategoriaService;
+use Exception;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ProdutoApi
+class CategoriaApi
 {
 
     protected $service;
 
-    public function __construct(ProdutoService $service)
+    public function __construct(CategoriaService $service)
     {
         $this->service = $service;
     }
@@ -27,23 +29,14 @@ class ProdutoApi
     {
         $dados = [
             "nome" => $request->get('nome'),
-            "descricao" => $request->get('descricao'),
-            "valor" => $request->get('valor'),
         ];
         $constraint = new Assert\Collection(array(
             'nome' => array(
                 new Assert\NotBlank(),
                 new Assert\Length(array('min' => 3, 'max' => 255))
             ),
-            'descricao' => array(
-                new Assert\NotBlank(),
-                new Assert\Length(array('min' => 3, 'max' => 8000))
-            ),
-            'valor' => array(
-                new Assert\NotBlank(),
-            ),
         ));
-        
+
         $errors = $app['validator']->validate($dados, $constraint);
         if (count($errors) > 0) {
             $arr_erros = [];
@@ -54,9 +47,7 @@ class ProdutoApi
                 'errors' => $arr_erros
             ));
         }
-        $dados['categoria'] = $request->get('categoria');
-        $dados['tags'] = $request->get('tags');
-        
+
         try {
             $insert = $this->service->insert($dados);
             return $app->json(array('success' => true));
@@ -71,12 +62,12 @@ class ProdutoApi
     public function buscaPorId($id, Application $app)
     {
         $entity = $this->service->find($id);
-        if (is_null($entity)) {
+        if (! $entity instanceof Categoria) {
             return $app->json(array(
                         'errors' => ["Erro: Registro com ID = $id não existe!"]
             ));
         }
-        return $app->json($entity->toArray());
+        return $app->json( $entity->toArray() );
     }
 
     public function editar(Request $request, $id, Application $app)
@@ -90,20 +81,11 @@ class ProdutoApi
         }
         $dados = [
             "nome" => $request->get('nome'),
-            "descricao" => $request->get('descricao'),
-            "valor" => $request->get('valor'),
         ];
         $constraint = new Assert\Collection(array(
             'nome' => array(
                 new Assert\NotBlank(),
                 new Assert\Length(array('min' => 3, 'max' => 255))
-            ),
-            'descricao' => array(
-                new Assert\NotBlank(),
-                new Assert\Length(array('min' => 3, 'max' => 8000))
-            ),
-            'valor' => array(
-                new Assert\NotBlank(),
             ),
         ));
 
@@ -120,8 +102,7 @@ class ProdutoApi
         }
 
         $dados['id'] = $id;
-        $dados['categoria'] = $request->get('categoria');
-        $dados['tags'] = $request->get('tags');
+
         try {
             $ret = $this->service->update($id, $dados);
             return $app->json(array('success' => true));

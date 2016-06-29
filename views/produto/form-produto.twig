@@ -1,12 +1,5 @@
 {% extends "layout.twig" %}
 
-{% block navigation %}
-    <ul class="nav navbar-nav">
-        <li><a href="{{ path("lista_clientes") }}">Clientes</a></li>
-        <li><a href="{{ path("lista_produtos") }}">Produtos</a></li>
-    </ul>
-{% endblock %}
-
 {% block scripts %}
     <script src="{{ asset('/js/jquery.mask.min.js') }}"></script>
     <script src="{{ asset('/js/produtos.js') }}"></script>
@@ -45,6 +38,35 @@
             <label class="col-sm-2 control-label">Valor</label>
             <div class="col-sm-10">
                 {{ forms.input('valor', produto.valor|number_format(2, ',', '.'), 'text', 10) }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Categoria</label>
+            <div class="col-sm-10">
+                
+                <select name="categoria" class="form-control" >
+                {% for cat in categorias %}
+                    
+                    <option value="{{ cat.id }}" {% if cat.id == categoria_id %}selected="selected"{% endif %}  >
+                        {{ cat.nome }}
+                    </option>
+                {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Tags</label>
+            <div class="col-sm-10">
+                {% for tag in tags %}
+                    {% set checked = tag not in tags_selecionados %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="tags[]" {% if checked == false %}checked="checked"{% endif %}
+                                   value="{{ tag.id }}" class="form-control" >
+                        {{ tag.nome }}
+                        </label>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <div class="form-group">

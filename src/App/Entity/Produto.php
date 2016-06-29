@@ -113,7 +113,13 @@ class Produto  extends BaseEntity
         return $this;
     }
 
-    public function addTags(Tag $tag)
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+    
+    public function addTag(Tag $tag)
     {
         $this->tags->add($tag);
         return $this;

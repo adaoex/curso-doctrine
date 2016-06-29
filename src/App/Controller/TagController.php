@@ -2,22 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\Produto;
-use App\Service\ProdutoService;
+use App\Entity\Tag;
+use App\Service\TagService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProdutoController
+class TagController
 {
 
     protected $service;
 
-    public function __construct(ProdutoService $service)
+    public function __construct(TagService $service)
     {
         $this->service = $service;
     }
 
-    public function produtos(Request $request, Application $app)
+    public function tags(Request $request, Application $app)
     {
         $busca = $request->get('s');
         $pag = $request->get('pag');
@@ -35,8 +35,8 @@ class ProdutoController
 
         $paginacao['total_paginas'] = ceil($paginacao['total_registros'] / $paginacao['registros_por_pagina']);
         return $app['twig']->render(
-                        'produto/lista.twig', [
-                    'produtos' => $itens,
+                        'tag/lista.twig', [
+                    'tags' => $itens,
                     'busca' => $busca,
                     'paginacao' => $paginacao
         ]);
@@ -44,34 +44,18 @@ class ProdutoController
 
     public function novo(Application $app)
     {
-        $categorias = $app['categoria.service']->fetchAll();
-        $tags = $app['tag.service']->fetchAll();
         return $app['twig']->render(
-                'produto/form-produto.twig', 
-                [
-                    'produto' => new Produto(),
-                    'categorias' => $categorias,
-                    'tags' => $tags,
-                    'tags_selecionados' => [],
-                    'categoria_id' => 0,
-                ]
+                'tag/form-tag.twig', 
+                ['tag' => new Tag()]
             );
     }
 
     public function editar($id, Application $app)
     {
         $entity = $this->service->find($id);
-        $categorias = $app['categoria.service']->fetchAll();
-        $tags = $app['tag.service']->fetchAll();
         return $app['twig']->render(
-                'produto/form-produto.twig', 
-                [
-                    'produto' => $entity,
-                    'categorias' => $categorias,
-                    'tags' => $tags,
-                    'tags_selecionados' => $entity->getTags(),
-                    'categoria_id' => $entity->getCategoria()->getId(),
-                ]
+                'tag/form-tag.twig', 
+                ['tag' => $entity]
         );
     }
 

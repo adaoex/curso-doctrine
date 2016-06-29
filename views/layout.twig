@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Curso Silex{% endblock %}</title>
+        <title>{% block title %}Curso Doctrine{% endblock %}</title>
 
         <link rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}" >
         
@@ -33,11 +33,16 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Curso Silex</a>
+                    <a class="navbar-brand" href="#">Curso Doctrine</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                    {% block navigation %}
-                    {% endblock %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path("lista_clientes") }}">Clientes</a></li>
+                        <li><a href="{{ path("lista_produtos") }}">Produtos</a></li>
+                        <li><a href="{{ path("lista_tags") }}">Tags</a></li> 
+                        <li><a href="{{ path("lista_categorias") }}">Categorias</a></li> 
+                        {% block navigation %} {% endblock %}
+                    </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>

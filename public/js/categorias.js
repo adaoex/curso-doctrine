@@ -1,22 +1,11 @@
 $(function () {
     
-    $('input[name="valor"]').mask("#.##0,00", {reverse: true});
-    
-    $("#form-produto").submit(function (event) {
+    $("#form-categoria").submit(function (event) {
         event.preventDefault();
 
         var $form = $(this),
             id = $form.find("input[name='id']").val(),
-            campos = $form.serialize(), 
-            el_tags = $form.find("input[name='tags']:checked"), 
-            arr_tags = [];
-        $.each(el_tags, function(idx, val){
-            arr_tags.push( $(val).val() );
-        });
-        
-        //var atr_tags = arr_tags.join(',');
-        //campos = $.merge( campos, {'tags_sel': atr_tags} );
-        console.log( campos );
+            campos = $form.serialize();
         
         var success = function (data) {
             if (data.success){
@@ -42,9 +31,9 @@ $(function () {
         };
         
         if ( id.length === 0 ){
-            $.ajax({type: "POST",url: '/api/produtos',data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",url: '/api/categorias',data: campos,success: success,dataType: 'json'});
         }else{
-            $.ajax({type: "POST",url: '/api/produtos/'+id,data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "PUT",url: '/api/categorias/'+id,data: campos,success: success,dataType: 'json'});
         }
     });
     
@@ -54,7 +43,7 @@ $(function () {
         $.ajax({
             type: "DELETE",
             data: {_method: 'DELETE'},
-            url: '/api/produtos/' + id,
+            url: '/api/categorias/' + id,
             success: function(){
                 window.location.reload();
             },

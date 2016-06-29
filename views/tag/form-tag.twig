@@ -1,0 +1,41 @@
+{% extends "layout.twig" %}
+
+{% block scripts %}
+    <script src="{{ asset('/js/tags.js') }}"></script>
+{% endblock%}
+
+{% import "forms.twig" as forms %}
+
+{% block content %}
+    <h2>Tags</h2>
+        
+    <form method="post" id="form-tag" class="form-horizontal" 
+        {% if tag.id > 0 %}
+          action="{{ path('tag_editar', {id: tag.id}) }}" >
+        {% else %}
+            action="{{ path('novo_tag') }}" >
+        {% endif %}
+        
+        {{ forms.input('id', tag.id, 'hidden',0) }}
+        
+        {% if tag.id > 0 %}
+            <input type="hidden" id="_method" name="_method" value="PUT">
+        {% endif %}
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Nome</label>
+            <div class="col-sm-10">
+                {{ forms.input('nome', tag.nome, 'text', 255, 'digite o nome do tag') }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                {% if tag.id|length > 0 %}
+                    <button type="submit" class="btn btn-default">Salvar Alterações</button>
+                {% else %}
+                    <button type="submit" class="btn btn-default">Salvar</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -1,12 +1,5 @@
 {% extends "layout.twig" %}
 
-{% block navigation %}
-    <ul class="nav navbar-nav">
-        <li><a href="{{ path("lista_clientes") }}">Clientes</a></li>
-        <li><a href="{{ path("lista_produtos") }}">Produtos</a></li>
-    </ul>
-{% endblock %}
-
 {% block scripts %}
     <script src="{{ asset('/js/clientes.js') }}"></script>
 {% endblock%}

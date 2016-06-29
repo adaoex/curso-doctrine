@@ -23,6 +23,15 @@ class ProdutoService
         $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
         $entity->setValor( $valor );
         
+        $categoria = $this->em->getReference('App\Entity\Categoria', $dados['categoria']);
+        $entity->setCategoria($categoria);
+
+        if (key_exists('tags', $dados) ){
+            foreach ($dados['tags'] as $tag) {
+                $tag = $this->em->getReference('App\Entity\Tag', $tag);
+                $entity->addTag($tag);
+            }
+        }
         $res = $this->em->persist($entity);
         $this->em->flush();
 
@@ -36,7 +45,17 @@ class ProdutoService
         $entity->setDescricao($dados['descricao']);
         $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
         $entity->setValor( $valor );
+        $categoria = $this->em->getReference('App\Entity\Categoria', $dados['categoria']);
+        $entity->setCategoria($categoria);
 
+        if (key_exists('tags', $dados) ){
+            $entity->setTags( new \Doctrine\Common\Collections\ArrayCollection() );
+            foreach ($dados['tags'] as $tag) {
+                $tag = $this->em->getReference('App\Entity\Tag', $tag);
+                $entity->addTag($tag);
+            }
+        }
+        
         $res = $this->em->persist($entity);
         $this->em->flush();
 
@@ -48,7 +67,7 @@ class ProdutoService
         return $this->em
                     ->getRepository("App\\Entity\\Produto")
                     ->findAllPaginator($firstResults, $maxResults);
-        }
+    }
     
     public function find($id)
     {
