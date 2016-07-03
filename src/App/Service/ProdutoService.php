@@ -20,6 +20,7 @@ class ProdutoService
         $entity = new Produto();
         $entity->setNome($dados['nome']);
         $entity->setDescricao($dados['descricao']);
+        $entity->setImagem($dados['imagem']);
         $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
         $entity->setValor( $valor );
         
@@ -43,6 +44,7 @@ class ProdutoService
         $entity = $this->em->getReference( 'App\\Entity\\Produto', $id);
         $entity->setNome($dados['nome']);
         $entity->setDescricao($dados['descricao']);
+        $entity->setImagem($dados['imagem']);
         $valor = str_replace(',', '.',str_replace('.', '', $dados['valor']));
         $entity->setValor( $valor );
         $categoria = $this->em->getReference('App\Entity\Categoria', $dados['categoria']);

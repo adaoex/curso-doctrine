@@ -2,16 +2,18 @@ $(function () {
     
     $('input[name="valor"]').mask("#.##0,00", {reverse: true});
     
-    var campos = [];
-    $("#form-produto").change(function (event) {
-        campos = $(this).serialize();
-        campos.append('imagem', event.target.files[0]);
-        //var name = event.target.files[0].content.name; // para capturar o nome do arquivo com sua extenção
-    });
+//    var campos = [];
+//    $("#form-").change(function (event) {
+//        campos = $(this).serialize();
+//        campos.append('imagem', event.target.files[0]);
+//        //var name = event.target.files[0].content.name; // para capturar o nome do arquivo com sua extenção
+//    });
     
     $("#form-produto").submit(function (event) {
         event.preventDefault();
-
+        
+        var formData = new FormData($(this)[0]);
+        
         var $form = $(this),
             id = $form.find("input[name='id']").val(),
             campos = $form.serialize(), 
@@ -20,11 +22,7 @@ $(function () {
         $.each(el_tags, function(idx, val){
             arr_tags.push( $(val).val() );
         });
-        
-        // var atr_tags = arr_tags.join(',');
-        // campos = $.merge( campos, {'tags_sel': atr_tags} );
-        // console.log( campos );
-        
+       
         var success = function (data) {
             if (data.success){
                 $('.starter-template h2')
@@ -46,12 +44,15 @@ $(function () {
                         <strong>Erro!</strong> Ocorreu um erro. <br>\n\
                         '+mensagem+' </div>');
             }
+            setTimeout(function () {
+                location.reload();
+            }, 4000);
         };
         
         if ( id.length === 0 ){
-            $.ajax({type: "POST",contentType:'multipart/form-data', url: '/api/produtos',data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",contentType:false, processData:false, url: '/api/produtos',data: formData,success: success,dataType: 'json'});
         }else{
-            $.ajax({type: "POST",contentType:'multipart/form-data', url: '/api/produtos/'+id,data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",contentType:false, processData:false, url: '/api/produtos/'+id,data: formData,success: success,dataType: 'json'});
         }
     });
     

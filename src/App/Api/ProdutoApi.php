@@ -4,6 +4,7 @@ namespace App\Api;
 
 use App\Service\ProdutoService;
 use Silex\Application;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,11 +26,12 @@ class ProdutoApi
 
     public function novo(Request $request, Application $app)
     {
+        
         $dados = [
             "nome" => $request->get('nome'),
             "descricao" => $request->get('descricao'),
             "valor" => $request->get('valor'),
-            "imagem" => $request->get('imagem'),
+            "imagem" => $request->files->get('imagem'),
         ];
         
         $constraint = new Assert\Collection(array(
@@ -46,13 +48,6 @@ class ProdutoApi
             ),
             'imagem' => array(
                 new Assert\NotBlank(),
-                new Assert\Image(array(
-                    'mimeTypes' => array(
-                        "image/png", 
-                        "image/jpg", 
-                        "image/jpeg"
-                    )
-                ))
             ),
         ));
         
@@ -66,6 +61,7 @@ class ProdutoApi
                 'errors' => $arr_erros
             ));
         }
+        
         $dados['categoria'] = $request->get('categoria');
         $dados['tags'] = $request->get('tags');
         
@@ -104,6 +100,7 @@ class ProdutoApi
             "nome" => $request->get('nome'),
             "descricao" => $request->get('descricao'),
             "valor" => $request->get('valor'),
+            "imagem" => $request->files->get('imagem'),
         ];
         $constraint = new Assert\Collection(array(
             'nome' => array(
@@ -115,6 +112,9 @@ class ProdutoApi
                 new Assert\Length(array('min' => 3, 'max' => 8000))
             ),
             'valor' => array(
+                new Assert\NotBlank(),
+            ),
+            'imagem' => array(
                 new Assert\NotBlank(),
             ),
         ));

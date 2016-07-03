@@ -5,48 +5,7 @@ if (php_sapi_name() === 'cli-server' && is_file($filename)) {
 }
 require_once __DIR__.'/../bootstrap.php';
 
-$app['cliente.service'] = function() use ($entityManager) {
-    return new App\Service\ClienteService($entityManager);
-};
-$app['produto.service'] = function() use ($entityManager) {
-    return new App\Service\ProdutoService($entityManager);
-};
-$app['categoria.service'] = function() use ($entityManager) {
-    return new App\Service\CategoriaService($entityManager);
-};
-$app['tag.service'] = function() use ($entityManager) {
-    return new App\Service\TagService($entityManager);
-};
-$app['uploader.service'] = function() {
-    return new \App\Service\FileUploader( __DIR__. '/../web/image/');
-};
-
-/* controllers */
-$app['cliente.controller'] = function() use ($app) {
-    return new App\Controller\ClienteController($app['cliente.service']);
-};
-$app['produto.controller'] = function() use ($app) {
-    return new App\Controller\ProdutoController($app['produto.service']);
-};
-$app['categoria.controller'] = function() use ($app) {
-    return new App\Controller\CategoriaController($app['categoria.service']);
-};
-$app['tag.controller'] = function() use ($app) {
-    return new App\Controller\TagController($app['tag.service']);
-};
-
-$app['cliente.api'] = function() use ($app) {
-    return new App\Api\ClienteApi($app['cliente.service']);
-};
-$app['produto.api'] = function() use ($app) {
-    return new App\Api\ProdutoApi($app['produto.service']);
-};
-$app['tag.api'] = function() use ($app) {
-    return new App\Api\TagApi($app['tag.service']);
-};
-$app['categoria.api'] = function() use ($app) {
-    return new App\Api\CategoriaApi($app['categoria.service']);
-};
+require_once __DIR__.'/../src/App/Service/config/services.php';
 
 /* CRUD clientes */
 $app->get("/", function() use ($app) {
@@ -71,6 +30,14 @@ $app->get("/produto/novo", "produto.controller:novo")
 
 $app->get("/produto/editar/{id}", "produto.controller:editar")
         ->bind("form_editar_produto");
+
+$app->get( "/produto/imagem/{id}", function($id) use ($app){
+    $entity = $app['produto.service']->find($id);
+    $mime = image_type_to_mime_type(exif_imagetype($entity->getImagem()));
+    header("Content-type: {$mime}"); 
+    readfile($entity->getImagem());
+    exit(0);
+});
 
 /* CRUD tag */
 $app->get("/tags", "tag.controller:tags")

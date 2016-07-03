@@ -1,15 +1,24 @@
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
+use App\EventListener\ImageUploadListener;
+use App\Service\FileUploader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\EventManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Silex\Application;
+use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
 
 /* Doctrine */
 $cache = new ArrayCache();
@@ -22,7 +31,7 @@ $annotationDriver = new AnnotationDriver(
 $driverChain = new DriverChain();
 $driverChain->addDriver($annotationDriver, "App");
 
-$config = new Doctrine\ORM\Configuration();
+$config = new Configuration();
 $config->setProxyDir("/tmp");
 $config->setProxyNamespace("Proxy");
 $config->setAutoGenerateProxyClasses(true);
@@ -38,16 +47,20 @@ AnnotationRegistry::registerFile(
         . DIRECTORY_SEPARATOR . 'DoctrineAnnotations.php'
 );
 
-$eventManager = new Doctrine\Common\EventManager();
-$entityManager = \Doctrine\ORM\EntityManager::create(
-    [
-        'driver'    => 'pdo_sqlite',
-        'path'     => __DIR__.'/app.db',
-    ],
-    $config,
-    $eventManager
+$eventManager = new EventManager();
+$eventManager->addEventListener(array(
+            Events::prePersist,
+            Events::preUpdate,
+            Events::postLoad,
+        ),
+        new ImageUploadListener(new FileUploader(__DIR__. '/web/image/'))
 );
-
+$entityManager = EntityManager::create(
+                [
+                    'driver' => 'pdo_sqlite',
+                    'path' => __DIR__ . '/app.db',
+                ], $config, $eventManager
+);
 
 /* App */
 $app = new Application();
@@ -64,8 +77,8 @@ $app->register(new DoctrineServiceProvider(), array(
     ),
 ));
 
-$app->register(new Silex\Provider\AssetServiceProvider());
+$app->register(new AssetServiceProvider());
 
-$app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new ValidatorServiceProvider());
 
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+$app->register(new ServiceControllerServiceProvider());

@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
+
     private $diretorio;
 
     public function __construct($diretorio)
@@ -15,11 +16,16 @@ class FileUploader
 
     public function upload(UploadedFile $arquivo)
     {
-        $nomeArquivo = md5(uniqid()).'.'.$arquivo->guessExtension();
+        $nomeArquivo = md5(uniqid()) . '.' . $arquivo->guessExtension();
 
-        $file->move($this->diretorio, $nomeArquivo);
+        $arquivo->move($this->diretorio, $nomeArquivo);
 
         return $nomeArquivo;
     }
-    
+
+    public function getDiretorio()
+    {
+        return $this->diretorio;
+    }
+
 }
