@@ -2,6 +2,13 @@ $(function () {
     
     $('input[name="valor"]').mask("#.##0,00", {reverse: true});
     
+    var campos = [];
+    $("#form-produto").change(function (event) {
+        campos = $(this).serialize();
+        campos.append('imagem', event.target.files[0]);
+        //var name = event.target.files[0].content.name; // para capturar o nome do arquivo com sua extenção
+    });
+    
     $("#form-produto").submit(function (event) {
         event.preventDefault();
 
@@ -14,9 +21,9 @@ $(function () {
             arr_tags.push( $(val).val() );
         });
         
-        //var atr_tags = arr_tags.join(',');
-        //campos = $.merge( campos, {'tags_sel': atr_tags} );
-        console.log( campos );
+        // var atr_tags = arr_tags.join(',');
+        // campos = $.merge( campos, {'tags_sel': atr_tags} );
+        // console.log( campos );
         
         var success = function (data) {
             if (data.success){
@@ -42,9 +49,9 @@ $(function () {
         };
         
         if ( id.length === 0 ){
-            $.ajax({type: "POST",url: '/api/produtos',data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",contentType:'multipart/form-data', url: '/api/produtos',data: campos,success: success,dataType: 'json'});
         }else{
-            $.ajax({type: "POST",url: '/api/produtos/'+id,data: campos,success: success,dataType: 'json'});
+            $.ajax({type: "POST",contentType:'multipart/form-data', url: '/api/produtos/'+id,data: campos,success: success,dataType: 'json'});
         }
     });
     

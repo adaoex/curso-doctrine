@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Entity\ProdutoRepository")
+ * @ORM\Entity(repositoryClass="ProdutoRepository")
  * @ORM\Table("produtos")
  */
 class Produto  extends BaseEntity
@@ -47,9 +48,25 @@ class Produto  extends BaseEntity
     */
     private $tags;
     
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $imagem;
+
+    public function getImagem()
+    {
+        return $this->imagem;
+    }
+
+    public function setImagem($imagem)
+    {
+        $this->imagem = $imagem;
+        return $this;
+    }
+    
     public function __construct(array $data = array())
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new ArrayCollection();
         parent::__construct($data);
     }
     

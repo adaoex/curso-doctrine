@@ -17,7 +17,11 @@ $app['categoria.service'] = function() use ($entityManager) {
 $app['tag.service'] = function() use ($entityManager) {
     return new App\Service\TagService($entityManager);
 };
+$app['uploader.service'] = function() {
+    return new \App\Service\FileUploader( __DIR__. '/../web/image/');
+};
 
+/* controllers */
 $app['cliente.controller'] = function() use ($app) {
     return new App\Controller\ClienteController($app['cliente.service']);
 };

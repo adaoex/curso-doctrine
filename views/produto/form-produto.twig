@@ -10,7 +10,8 @@
 {% block content %}
     <h2>Produto</h2>
         
-    <form method="post" id="form-produto" class="form-horizontal" 
+    <form method="post" id="form-produto" 
+          class="form-horizontal" enctype="multipart/form-data"
         {% if produto.id > 0 %}
           action="{{ path('produto_editar', {id: produto.id}) }}" >
         {% else %}
@@ -69,6 +70,18 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Imagem do produto</label>
+            <div class="col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="file" name="imagem" class="file" >
+                        Imagen (png, jpg ou jpeg)
+                    </label>
+                </div>
+            </div>
+        </div>
+ 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 {% if produto.id|length > 0 %}

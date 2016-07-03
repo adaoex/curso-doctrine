@@ -46,6 +46,7 @@ class ProdutoController
     {
         $categorias = $app['categoria.service']->fetchAll();
         $tags = $app['tag.service']->fetchAll();
+        
         return $app['twig']->render(
                 'produto/form-produto.twig', 
                 [

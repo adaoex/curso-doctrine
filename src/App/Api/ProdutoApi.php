@@ -29,7 +29,9 @@ class ProdutoApi
             "nome" => $request->get('nome'),
             "descricao" => $request->get('descricao'),
             "valor" => $request->get('valor'),
+            "imagem" => $request->get('imagem'),
         ];
+        
         $constraint = new Assert\Collection(array(
             'nome' => array(
                 new Assert\NotBlank(),
@@ -41,6 +43,16 @@ class ProdutoApi
             ),
             'valor' => array(
                 new Assert\NotBlank(),
+            ),
+            'imagem' => array(
+                new Assert\NotBlank(),
+                new Assert\Image(array(
+                    'mimeTypes' => array(
+                        "image/png", 
+                        "image/jpg", 
+                        "image/jpeg"
+                    )
+                ))
             ),
         ));
         
